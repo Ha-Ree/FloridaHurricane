@@ -38,11 +38,11 @@ Options:
 ### Example Commands
 Simulating a large number of years using fast mode:
 
-`python gethurricaneloss.py 1.2 2.0 0.5 1.5 1.8 0.4 -n 10000000000000000000000000 --fast`
+`python gethurricaneloss.py -n 10000000000000000000000000 --fast 1.2 2.0 0.5 1.5 1.8 0.4`
 
 Simulating smaller case:
 
-`python gethurricaneloss.py 1.2 2.0 0.5 1.5 1.8 0.4 -n 100000`
+`python gethurricaneloss.py -n 100000 1.2 2.0 0.5 1.5 1.8 0.4`
 
 ## Logging
 This program includes logging to track the progress of the simulation and other relevant information. The logs are output to the terminal or can be configured to be written to a file.
