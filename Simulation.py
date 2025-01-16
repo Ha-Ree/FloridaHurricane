@@ -1,4 +1,3 @@
-from typing import Optional
 from HurricaneSimulator import HurricaneSimulator
 import logging
 
@@ -34,35 +33,67 @@ class Simulation:
         ValueError: If gulf_landfall_rate is not positive.
         ValueError: If gulf_stddev is not positive.
     """
-    def __init__(self, florida_landfall_rate: float, florida_mean: float, florida_stddev: float, gulf_landfall_rate: float, gulf_mean: float, gulf_stddev: float) -> None:        
-        self.florida = HurricaneSimulator(florida_landfall_rate, florida_mean, florida_stddev)
-        self.gulf = HurricaneSimulator(gulf_landfall_rate, gulf_mean, gulf_stddev)
+    def __init__(
+        self, 
+        florida_landfall_rate: float, 
+        florida_mean: float, 
+        florida_stddev: float, 
+        gulf_landfall_rate: float, 
+        gulf_mean: float, 
+        gulf_stddev: float) -> None:        
+        self.florida_simulator = HurricaneSimulator(florida_landfall_rate, florida_mean, florida_stddev)
+        self.gulf_simulator = HurricaneSimulator(gulf_landfall_rate, gulf_mean, gulf_stddev)
         logger.info("Simulation initialised.")
     
-    def simulate(self, years: int, use_CLT: Optional[bool] = False) -> float:
+    def simulate(self, years: int) -> float:
         """
-        Simulates the average economic loss over a given number of years.
+        Simulates the average economic loss over a given number of years using a Monte Carlo algorithm.
 
         Parameters:
             years: int
                 The number of years to simulate over.
-            use_CLT: Optional[bool]
-                whether to use the Central Limit Theorem (CLT) to speed up simulation. Default is False.
+
+        Returns:
+            float
+                The expected annual loss in billions of dollars.
+        """
+        total_loss = 0
+        for year in range(years):
+            simulation_loss = 0
+            
+            num_florida_cases = self.florida_simulator.get_hurricanes()
+            for _ in range(num_florida_cases):
+                simulation_loss += self.florida_simulator.simulate()
+                
+            num_gulf_cases = self.gulf_simulator.get_hurricanes()
+            for _ in range(num_gulf_cases):
+                simulation_loss += self.gulf_simulator.simulate()
+                
+            total_loss += simulation_loss
+            if (year % 100 == 99):
+                logger.debug(f"Average after {year} years: {total_loss / year}")
+        return (total_loss / years)
+    
+    def simulate_fast(self, years: int) -> float:
+        """
+        Simulates the average economic loss over a given number of years using the CLT and Poisson addition.
+
+        Parameters:
+            years: int
+                The number of years to simulate over.
 
         Returns:
             float
                 The expected annual loss in billions of dollars.
         """
         if years <= 0:
-            logger.info("Simulation for no time.")
+            logger.error("Simulation for no time.")
             return 0
         
-        logger.info(f"Starting simulation for {years} years.")
-        
-        florida_loss = self.florida.simulate(years, use_CLT=use_CLT) # More efficient to simulate all at once than to loop over years with no/low hurricanes.
+        florida_loss = self.florida_simulator.simulate_fast(years) 
         logger.info(f"Florida simulation completed. Florida loss: {florida_loss:.2f} billion.")
         
-        gulf_loss = self.gulf.simulate(years, use_CLT=use_CLT)
+        gulf_loss = self.gulf_simulator.simulate_fast(years)
         logger.info(f"Gulf simulation completed. Gulf loss: {gulf_loss:.2f} billion.")
         
         average = (florida_loss + gulf_loss) / years

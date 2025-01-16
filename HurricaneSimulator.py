@@ -1,6 +1,5 @@
-from typing import Optional
 import numpy as np
-from LogNormalCLT import log_normal_CLT
+from Utils import log_normal_CLT, poisson_CLT
 import logging
 
 logger = logging.getLogger(__name__)
@@ -42,39 +41,34 @@ class HurricaneSimulator:
         self.mean = mean
         self.stddev = stddev
         logger.info(f"HurricaneSimulation initialised with rate={rate}, mean={mean}, stddev={stddev}.")
+        
+    def get_hurricanes(self) -> int:
+        """Returns the number of hurricanes in a year."""
+        return np.random.poisson(self.rate, 1)[0]
     
-    def simulate(self, years: int, batch_size: Optional[int] = 1000, use_CLT: Optional[bool] = False) -> float:
+    def simulate(self) -> float:
+        """Returns the economical loss of one hurricane."""
+        return np.random.lognormal(self.mean, self.stddev, 1)[0]
+    
+    def simulate_fast(self, years: int) -> float:
         """
         Simulates the total economic loss from hurricanes over a given number of years.
 
         Parameters:
             years: int
                 The number of years to simulate over.
-            batch_size: Optional[int]
-                The maximum number of events to process in a single batch to conserve memory. Default is 1000.
-            use_CLT: Optional[bool]
-                Whether to directly simulate or to use the Central Limit Theorem for efficiency. Default is False.
 
         Returns:
             float
                 The total simulated economic loss over the specified number of years, in billions of dollars.
         """
         rate = self.rate * years # Additive property of Poisson distribution
-        num_events = np.random.poisson(rate, 1)[0]
+        if rate < 100: # NumPy Poisson fails for rate greater than 2^31. After 100, the CLT very closely approximates the poisson.
+            num_events = np.random.poisson(rate, 1)[0]
+        else:
+            num_events = poisson_CLT(rate)
         logger.info(f"Simulating {num_events} hurricanes.")
-        if use_CLT:
-            logger.info("Simulating using CLT.")
-            total_loss = log_normal_CLT(self.mean, self.stddev, num_events)
-            logger.info(f"Finished simulating. Total loss: {total_loss}.")
-            return total_loss
-        
-        total_loss = 0
-        while num_events > 0:
-            batch = min(batch_size, num_events)
-            total_loss += np.sum(np.random.lognormal(self.mean, self.stddev, batch))
-            num_events -= batch_size
-            logger.debug(f"Processed batch of size {batch}. Current loss: {total_loss}.")
-        
+        total_loss = log_normal_CLT(self.mean, self.stddev, num_events)
         logger.info(f"Finished simulating. Total loss: {total_loss}.")
         return total_loss
     

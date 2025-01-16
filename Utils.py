@@ -24,3 +24,8 @@ def log_normal_CLT(mean: float, stddev: float, num_events: int) -> float:
     total_loss = np.random.normal(total_mean, total_stddev)
     
     return max(total_loss, 0.0)
+
+def poisson_CLT(rate: float) -> int:
+    stddev = np.sqrt(rate)
+    poisson = np.random.normal(rate, stddev)
+    return max(poisson, 0)

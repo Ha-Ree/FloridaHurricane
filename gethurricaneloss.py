@@ -50,13 +50,14 @@ def main():
     )
     
     parser.add_argument(
-        '--use_CLT', action='store_true',
-        help="Use Central Limit Theorem (CLT) to speed up the simulation."
+        '--fast', action='store_true',
+        help="Use Central Limit Theorem (CLT) and the additive property of poisson to speed up simulation. Use for large inputs."
     )
     
     args = parser.parse_args()
     
     logger.info(f"Received arguments: {args}")
+    logger.info(f"Starting simulation for {args.num_monte_carlo_samples} years.")
     
     sim = Simulation(
         args.florida_landfall_rate,
@@ -66,10 +67,12 @@ def main():
         args.gulf_mean,
         args.gulf_stddev
     )
+    if (args.fast):
+        average_loss = sim.simulate_fast(args.num_monte_carlo_samples)
+    else:
+        average_loss = sim.simulate(args.num_monte_carlo_samples)
     
-    average_loss = sim.simulate(args.num_monte_carlo_samples, use_CLT=args.use_CLT)
-    
-    logger.info(f"Average annual hurricane loss: ${average_loss:.2f} Billion")
+    logger.info(f"Average annual hurricane loss: {average_loss} Billion")
     
 if __name__ == "__main__":
     main()
