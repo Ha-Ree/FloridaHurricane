@@ -11,11 +11,11 @@ EPSILON = 1e-6
 
 """
 This file is ensuring that the right functions are being called and that, 
-given some 'random' numbers, we are recieving the correct outputs. No unit
+given some 'random' numbers, we are receiving the correct outputs. No unit
 testing is done with real randomness to ensure it cannot ever fail by chance.
 """
 
-def test_random_loss_generation_slow():
+def test_random_loss_generation_slow() -> None:
     with patch('numpy.random.normal') as mock_normal, \
         patch('numpy.random.poisson') as mock_poisson, \
         patch('numpy.random.lognormal') as mock_lognormal:
@@ -33,7 +33,7 @@ def test_random_loss_generation_slow():
         mock_lognormal.assert_any_call(1, 10, 1)
         mock_lognormal.assert_any_call(9, 6.6, 1)
    
-def test_random_loss_generation_fast():
+def test_random_loss_generation_fast() -> None:
     with patch('numpy.random.normal') as mock_normal, \
         patch('numpy.random.poisson') as mock_poisson, \
         patch('numpy.random.lognormal') as mock_lognormal:
@@ -52,7 +52,7 @@ def test_random_loss_generation_fast():
         mock_poisson.assert_not_called()
         mock_lognormal.assert_not_called()
         
-def test_random_loss_generation_fast_under_100():
+def test_random_loss_generation_fast_under_100() -> None:
     with patch('numpy.random.normal') as mock_normal, \
         patch('numpy.random.poisson') as mock_poisson, \
         patch('numpy.random.lognormal') as mock_lognormal:

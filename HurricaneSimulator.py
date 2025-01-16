@@ -59,7 +59,7 @@ class HurricaneSimulator:
         """
         valid_positive_integer(years)
         rate = self.rate * years # Additive property of Poisson distribution
-        if rate < 100: # NumPy Poisson fails for rate greater than 2^31. After 100, the CLT very closely approximates the poisson.
+        if rate < 100: # NumPy Poisson fails for rate greater than 2^31. After 100, the CLT very closely approximates the Poisson.
             num_events = np.random.poisson(rate, 1)[0]
         else:
             num_events = poisson_CLT(rate)
