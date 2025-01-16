@@ -11,10 +11,9 @@ logging.basicConfig(
     ]
 )
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def main():
+def main() -> float:
     parser = argparse.ArgumentParser(
         description="Calculate the average annual hurricane loss in $Billions for a simple hurricane model."
     )
@@ -73,6 +72,7 @@ def main():
         average_loss = sim.simulate(args.num_monte_carlo_samples)
     
     logger.info(f"Average annual hurricane loss: {average_loss} Billion")
+    return average_loss
     
 if __name__ == "__main__":
     main()

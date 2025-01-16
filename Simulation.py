@@ -1,5 +1,6 @@
 from HurricaneSimulator import HurricaneSimulator
 import logging
+from Utils import valid_positive_integer
 
 logger = logging.getLogger(__name__)
 
@@ -28,19 +29,21 @@ class Simulation:
             Contains landfall rate, mean and standard deviation for Gulf States and enables simulation.
             
     Raises:
+        TypeError: If variables incorrectly typed
         ValueError: If florida_landfall_rate is not positive.
         ValueError: If florida_stddev is negative.
         ValueError: If gulf_landfall_rate is not positive.
         ValueError: If gulf_stddev is not positive.
     """
     def __init__(
-        self, 
-        florida_landfall_rate: float, 
-        florida_mean: float, 
-        florida_stddev: float, 
-        gulf_landfall_rate: float, 
-        gulf_mean: float, 
-        gulf_stddev: float) -> None:        
+                self, 
+                florida_landfall_rate: float, 
+                florida_mean: float, 
+                florida_stddev: float, 
+                gulf_landfall_rate: float, 
+                gulf_mean: float, 
+                gulf_stddev: float
+                ) -> None:        
         self.florida_simulator = HurricaneSimulator(florida_landfall_rate, florida_mean, florida_stddev)
         self.gulf_simulator = HurricaneSimulator(gulf_landfall_rate, gulf_mean, gulf_stddev)
         logger.info("Simulation initialised.")
@@ -57,6 +60,7 @@ class Simulation:
             float
                 The expected annual loss in billions of dollars.
         """
+        valid_positive_integer(years)
         total_loss = 0
         for year in range(years):
             simulation_loss = 0
@@ -86,9 +90,6 @@ class Simulation:
             float
                 The expected annual loss in billions of dollars.
         """
-        if years <= 0:
-            logger.error("Simulation for no time.")
-            return 0
         
         florida_loss = self.florida_simulator.simulate_fast(years) 
         logger.info(f"Florida simulation completed. Florida loss: {florida_loss:.2f} billion.")

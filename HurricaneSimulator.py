@@ -1,5 +1,5 @@
 import numpy as np
-from Utils import log_normal_CLT, poisson_CLT
+from Utils import log_normal_CLT, poisson_CLT, valid_positive_integer, valid_float, valid_nonnegative_float
 import logging
 
 logger = logging.getLogger(__name__)
@@ -29,14 +29,9 @@ class HurricaneSimulator:
         ValueError: If stddev is negative.
     """
     def __init__(self, rate: float, mean: float, stddev: float) -> None:
-        if rate <= 0:
-            rate_error_message = f"Rate must be positive. Rate given: {rate}."
-            logger.error(rate_error_message)
-            raise ValueError(rate_error_message)
-        if stddev < 0:
-            stddev_error_message = f"Standard deviation must be non-negative. Deviation given: {stddev}"
-            logger.error(stddev_error_message)
-            raise ValueError(stddev_error_message)
+        valid_nonnegative_float(rate)
+        valid_float(mean)
+        valid_nonnegative_float(stddev)
         self.rate = rate
         self.mean = mean
         self.stddev = stddev
@@ -62,6 +57,7 @@ class HurricaneSimulator:
             float
                 The total simulated economic loss over the specified number of years, in billions of dollars.
         """
+        valid_positive_integer(years)
         rate = self.rate * years # Additive property of Poisson distribution
         if rate < 100: # NumPy Poisson fails for rate greater than 2^31. After 100, the CLT very closely approximates the poisson.
             num_events = np.random.poisson(rate, 1)[0]

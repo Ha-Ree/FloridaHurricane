@@ -96,4 +96,8 @@ python gethurricaneloss.py 1.2 2.0 0.5 1.5 1.8 0.4 -n 1000
 2025-01-16 11:20:12,789 - Simulation - DEBUG - Average after 999 years: 20.037955677224577
 2025-01-16 11:20:12,789 - __main__ - INFO - Average annual hurricane loss: 20.017917721547352 Billion
 ```
+
+## TODO
+Testing for logs
+
 Thanks for reading!
