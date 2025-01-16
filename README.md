@@ -5,7 +5,7 @@ This project was created specifically for Florida and the Gulf States, but it ca
 ## Installation 
 Simply clone the directory using 
 
-`git clone https://github.com/yourusername/FloridaHurricane.git`.
+`git clone https://github.com/Ha-Ree/FloridaHurricane.git`.
 
 ## Usage
 Run the simulation using the command
@@ -38,7 +38,7 @@ Options:
 ### Example Commands
 Simulating a large number of years using fast mode:
 
-`ppython gethurricaneloss.py 1.2 2.0 0.5 1.5 1.8 0.4 -n 10000000000000000000000000 --fast`
+`python gethurricaneloss.py 1.2 2.0 0.5 1.5 1.8 0.4 -n 10000000000000000000000000 --fast`
 
 Simulating smaller case:
 
