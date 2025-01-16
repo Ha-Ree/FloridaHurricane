@@ -8,7 +8,7 @@ Simply clone the directory using
 `git clone https://github.com/Ha-Ree/FloridaHurricane.git`.
 
 ## Usage
-Run the simulation by navigating to the FloridaHurricane file and using the command
+Run the simulation by navigating to the FloridaHurricane folder and using the command
 
 `python gethurricaneloss.py [options] florida_landfall_rate florida_mean florida_stddev gulf_landfall_rate gulf_mean gulf_stddev`
 
