@@ -17,22 +17,22 @@ Run the simulation using the command
 florida_landfall_rate: float
     The rate at which hurricanes hit Florida per year. Must be positive.
 florida_mean: float
-    The mean of the economic loss in Florida when modelled as log-normal, in billions of dollars.
+    The mean of the economic loss in Florida when modeled as log-normal, in billions of dollars.
 florida_stddev: float
-    The standard deviation of the economic loss in Florida when modelled as log-normal, in billions of dollars. Must be non-negative.
+    The standard deviation of the economic loss in Florida when modeled as log-normal, in billions of dollars. Must be non-negative.
 gulf_landfall_rate: float
     The rate at which hurricanes hit Gulf States per year. Must be positive.
 gulf_mean: float 
-    The mean of the economic loss in Gulf States when modelled as log-normal, in billions of dollars.
+    The mean of the economic loss in Gulf States when modeled as log-normal, in billions of dollars.
 gulf_stddev: float 
-    The standard deviation of the economic loss in Gulf States when modelled as log-normal, in billions of dollars. Must be non-negative.
+    The standard deviation of the economic loss in Gulf States when modeled as log-normal, in billions of dollars. Must be non-negative.
 Options:
 -n, --num_monte_carlo_samples
     Number of samples (years) to run. Default is 1000.
 --fast
     Speeds up the process by using the Poisson additive property and the Central Limit Theorem (CLT). 
 
-    This option should be used for any simulation with rate greater than 10^6 and can handle cases beyond 10,000,000,000,000,000,000,000,000 (10^25) with no difficulties.
+    This option should be used for any simulation with a high number of years and can handle cases beyond 10,000,000,000,000,000,000,000,000 (10^25) with no difficulties.
 ```
     
 ### Example Commands
